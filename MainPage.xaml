@@ -1,0 +1,83 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:syncfusion="clr-namespace:Syncfusion.Maui.Chat;assembly=Syncfusion.Maui.Chat"
+             xmlns:local="clr-namespace:chatAppMessage.ViewModel" 
+             x:Class="chatAppMessage.MainPage"
+             NavigationPage.HasNavigationBar="False">
+
+    <ContentPage.BindingContext>
+        <local:GettingStartedViewModel/>
+    </ContentPage.BindingContext>
+
+    <Grid>
+
+        <Grid x:Name="SidebarPanel" IsVisible="True" BackgroundColor="#243763" RowDefinitions="Auto, *">
+
+            <HorizontalStackLayout Grid.Row="0" Padding="20" Spacing="15" VerticalOptions="Center">
+                <Image Source="dotnet_bot.png" HeightRequest="24" WidthRequest="24" VerticalOptions="Center"/>
+                <Label Text="Messages" FontSize="28" FontAttributes="Bold" TextColor="#F6C90E" VerticalOptions="Center"/>
+            </HorizontalStackLayout>
+
+            <CollectionView Grid.Row="1" 
+                            ItemsSource="{Binding Clients}" 
+                            SelectionMode="Single"
+                            SelectionChanged="OnClientSelectionChanged">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Border StrokeShape="RoundRectangle 10" BackgroundColor="#1D2D50" Margin="10,5,10,5" Padding="10" StrokeThickness="0">
+                            <Grid ColumnDefinitions="Auto, *, Auto" ColumnSpacing="10">
+                                <Image Grid.Column="0" Source="dotnet_bot.png" HeightRequest="45" WidthRequest="45"/>
+                                <VerticalStackLayout Grid.Column="1" VerticalOptions="Center">
+                                    <Label Text="{Binding}" TextColor="White" FontAttributes="Bold" FontSize="16"/>
+                                    <Label Text="Tap to view messages" TextColor="#A6A6A6" FontSize="12" LineBreakMode="NoWrap"/>
+                                </VerticalStackLayout>
+                                <VerticalStackLayout Grid.Column="2" VerticalOptions="Center" HorizontalOptions="End">
+                                    <Ellipse WidthRequest="12" HeightRequest="12" Fill="#F6C90E"/>
+                                </VerticalStackLayout>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+        </Grid>
+
+        <Grid x:Name="ChatPanel" IsVisible="False" BackgroundColor="#D3D6DF" RowDefinitions="Auto, *">
+
+            <Border Grid.Row="0" BackgroundColor="#D3D6DF" Padding="20, 15" StrokeThickness="0">
+                <HorizontalStackLayout Spacing="15" VerticalOptions="Center">
+                    <Image HeightRequest="24" WidthRequest="24" VerticalOptions="Center">
+                        <Image.Source>
+                            <FontImageSource Glyph="&#x2190;" 
+                                             FontFamily="OpenSansRegular" 
+                                             Color="#F6C90E" 
+                                             Size="24"/>
+                        </Image.Source>
+                        <Image.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnBackArrowTapped"/>
+                        </Image.GestureRecognizers>
+                    </Image>
+                    <Image Source="dotnet_bot.png" HeightRequest="45" WidthRequest="45"/>
+                    <Label Text="{Binding SelectedClientName}" FontSize="22" FontAttributes="Bold" TextColor="Black" VerticalOptions="Center"/>
+                </HorizontalStackLayout>
+            </Border>
+
+            <syncfusion:SfChat Grid.Row="1" 
+                               x:Name="sfChat" 
+                               Messages="{Binding Messages}"
+                               CurrentUser="{Binding CurrentUser}"
+                               Background="#D3D6DF"
+                               ShowTimeBreak="True"
+                               MessageSpacing="24"
+                               ShowAttachmentButton="True"
+                               AttachmentButtonClicked="SfChat_AttachmentButtonClicked"
+                               ShowMessageInputView="True"
+                               ShowOutgoingMessageAuthorName="False"
+                               ShowOutgoingMessageAvatar="False"
+                               ShowIncomingMessageAuthorName="False"
+                               ShowIncomingMessageAvatar="False" />
+        </Grid>
+
+    </Grid>
+</ContentPage>
